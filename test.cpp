@@ -23,39 +23,23 @@ int search(string& pat, string& target, vector<vector<int>>& dfa) {
     int n = pat.size(); // #of states
     int i = 0, j = 0;
     for (; i < m && j < n; i++) {
-        int cur = dfa[target[i] - 'a'][j];
-        if (cur <= j) break;
-        j = cur;
-        cout << "at state " << j << endl;
+        j = dfa[target[i] - 'a'][j];
     }
-    return j;
+    if (j == n) return i - n;   // found
+    return -1;
 }
 
 int main() {
-    string line;
-    ifstream file ("test.in");
-    if (file.is_open()) {
-        while (getline(file,line)){
-            cout << line << ": ";
-
-            int n = line.size();
-            int res = n;
-            vector<vector<int>> dfa(26, vector<int>(n, 0));
-            kmp(line, dfa);
-            for (int i = 1; i < n; i++) {
-                if (line[i] != line[0]) continue;
-                if (line.substr(i, n - 1) == line.substr(0, n - i)) {
-                    res += (n - i);
-                    continue;
-                }
-                string cur = line.substr(i, n - 1);
-                cout << "substring: " << cur << endl;
-                cout << search(line, cur, dfa) << endl;
-                res += search(line, cur, dfa);
-            }
-            cout << res << endl;
-        }
-        file.close();
+    string pat = "aaa";
+    string target = "bbbaabaaa";
+    int n = pat.size();
+    vector<vector<int>> dfa(26, vector<int>(n, 0));
+    kmp(pat, dfa);
+    int startIdx = search(pat, target, dfa);
+    if (startIdx != -1) {
+        cout << "Match from index " << startIdx << endl;
+    } else {
+        cout << "Do not match" << endl;
     }
     return 0;
 }
