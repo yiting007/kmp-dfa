@@ -4,7 +4,7 @@
 #include<vector>
 using namespace std;
 
-void kmp (string& pat, vector<vector<int>>& dfa) {
+void kmp_table (string& pat, vector<vector<int>>& dfa) {
     int m = dfa.size(); // #of rows in kmp (possible number of characters)
     int n = pat.size(); // #of columns in kmp (possible number of states)
     dfa[pat[0] - 'a'][0] = 1; // at state 0, if read pat[0] then go to state 1
@@ -32,9 +32,12 @@ int search(string& pat, string& target, vector<vector<int>>& dfa) {
 int main() {
     string pat = "aaa";
     string target = "bbbaabaaa";
+    cout << "pattern = " << pat << "\t";
+    cout << "string = " << target << "\t";
     int n = pat.size();
+    // using kmp-table
     vector<vector<int>> dfa(26, vector<int>(n, 0));
-    kmp(pat, dfa);
+    kmp_table(pat, dfa);
     int startIdx = search(pat, target, dfa);
     if (startIdx != -1) {
         cout << "Match from index " << startIdx << endl;
